@@ -9,11 +9,19 @@ namespace taticlearn
     class Program
     {
         private static bool _s_stop = false;
+        enum menuItems { EndTurn, Nothing };
+        private static menuItems menuindex = menuItems.EndTurn;
 
-        private static int menuindex = 0;
-
-        private static List<String> menuitem = new List<String> { "End Turn", "Nothing" };
-
+        private static Dictionary<menuItems, String> menuitem = new Dictionary<menuItems, string> { { menuItems.Nothing, "Nothing" }, { menuItems.EndTurn, "End Turn" } };
+        private static menuItems Next(menuItems item)
+        {
+            return ((menuItems)Math.Min((int)item+1,1));
+        }
+        private static menuItems Previous(menuItems item)
+        {
+            return ((menuItems)Math.Max((int)item - 1, 0));
+        }
+        
         public static void Main(string[] args)
         {
             gamemain game = new gamemain();
@@ -28,9 +36,9 @@ namespace taticlearn
                     a = Console.ReadKey(true);
                 
                     if (a.Key.Equals(ConsoleKey.UpArrow))
-                        menuindex = Math.Min(1, menuindex+1);
+                        menuindex = Next(menuindex);
                     if (a.Key.Equals(ConsoleKey.DownArrow))
-                        menuindex = Math.Max(0, menuindex-1);
+                        menuindex = Previous(menuindex);
                     if (a.Key.Equals(ConsoleKey.Enter))
                         executeMenu(menuindex,game);
                    
@@ -49,10 +57,10 @@ namespace taticlearn
             _s_stop = true;
             Console.WriteLine("CancelKeyPress fired...");
         }
-        static void executeMenu(int menuindex,gamemain game)
+        static void executeMenu(menuItems menuindex,gamemain game)
         {
             switch (menuindex)
-            { case 0:
+            { case menuItems.EndTurn:
                     game.runturn();
                     break;
             }
@@ -63,19 +71,19 @@ namespace taticlearn
             Console.Clear();
             Console.WriteLine("still running at {0}", game.turn);
             Console.Write(game.gameString());
-           
-            foreach (int i in Enumerable.Range( 0,menuitem.Count()).Reverse())
+
+            foreach (KeyValuePair<menuItems, String> pair in menuitem)
             {
-                if (i == menuindex)
+                if ((pair.Key) == menuindex)
                 {
                     Console.BackgroundColor = ConsoleColor.Blue;
                     Console.ForegroundColor = ConsoleColor.White;
 
-                    Console.WriteLine(menuitem[i]);
+                    Console.WriteLine(pair.Value);
                     Console.ResetColor();
                 }
                 else
-                    Console.WriteLine(menuitem[i]);
+                    Console.WriteLine(pair.Value);
 
             }
         }
