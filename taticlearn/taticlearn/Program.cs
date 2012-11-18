@@ -14,7 +14,7 @@ namespace taticlearn
         public static void Main(string[] args)
         {
             gamemain game = new gamemain();
-            
+            bool mathieugay = true;
 
             Console.CancelKeyPress += new ConsoleCancelEventHandler(Console_CancelKeyPress);
             while (!_s_stop)
