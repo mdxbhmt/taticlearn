@@ -5,8 +5,11 @@ using System.Text;
 
 namespace taticlearn
 {
-    interface gameobject
+    class npc : gameobject
     {
-        String representation();
+        public String representation()
+        {
+            return "n";
+        }
     }
 }

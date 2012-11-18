@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="gamemain.cs" />
     <Compile Include="gameobject.cs" />
+    <Compile Include="npc.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
