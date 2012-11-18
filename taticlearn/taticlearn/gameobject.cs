@@ -5,7 +5,7 @@ using System.Text;
 
 namespace taticlearn
 {
-    class gameobject
+    interface gameobject
     {
     }
 }
