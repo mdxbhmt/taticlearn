@@ -13,8 +13,6 @@ namespace taticlearn
         {
             grid_ = new gridcell[x, y];
             grid_[3, 1] = new gridcell(new npc());
-        }
-       
-      
+        }    
     }
 }

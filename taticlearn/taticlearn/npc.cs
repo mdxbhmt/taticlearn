@@ -11,5 +11,6 @@ namespace taticlearn
         {
             return "n";
         }
+        public void Update(TimeSpan deltaT) { }
     }
 }

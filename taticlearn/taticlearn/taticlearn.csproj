@@ -47,6 +47,8 @@
     <Compile Include="gamemain.cs" />
     <Compile Include="gameobject.cs" />
     <Compile Include="grid.cs" />
+    <Compile Include="GUImenu.cs" />
+    <Compile Include="mainmenu.cs" />
     <Compile Include="npc.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
