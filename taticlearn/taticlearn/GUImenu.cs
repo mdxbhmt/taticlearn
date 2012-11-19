@@ -6,7 +6,7 @@ using System.Text;
 namespace taticlearn
 {
     interface GUImenu
-    {        
+    {
         void executeMenu();
         void print();
         void Next();

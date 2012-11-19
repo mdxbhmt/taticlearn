@@ -6,18 +6,18 @@ using System.Text;
 namespace taticlearn
 {
     class mainmenu : GUImenu
-    {       
+    {
         menuItems menuindex = menuItems.EndTurn;
         gamemain game;
         public enum menuItems { EndTurn, Select, Nothing };
 
         Dictionary<menuItems, Action> executeMenuDic = new Dictionary<menuItems, Action>();
         public Dictionary<menuItems, String> menuitem = new Dictionary<menuItems, string> { { menuItems.Nothing, "Nothing" }, { menuItems.Select, "Select" }, { menuItems.EndTurn, "End Turn" } };
-        
+
         public mainmenu(gamemain parent)
         {
             game = parent;
-            executeMenuDic[menuItems.EndTurn] = () => game.runturn();   
+            executeMenuDic[menuItems.EndTurn] = () => game.runturn();
         }
 
         public void Next()
@@ -37,7 +37,7 @@ namespace taticlearn
             catch (KeyNotFoundException)
             { }
             catch (Exception)
-            { throw; }           
+            { throw; }
         }
 
         public void print()

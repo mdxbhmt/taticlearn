@@ -8,6 +8,6 @@ namespace taticlearn
     interface gameobject
     {
         String representation();
-        void Update(TimeSpan deltaT);
+        bool Update(TimeSpan deltaT);
     }
 }

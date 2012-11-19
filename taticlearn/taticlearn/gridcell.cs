@@ -9,7 +9,7 @@ namespace taticlearn
     {
         private Tuple<gameobject, ConsoleColor> cell_;
         public gridcell(gameobject cellobject) { cell_ = Tuple.Create(cellobject, ConsoleColor.Green); }
-        public gameobject  cellObject() { return cell_.Item1; }
+        public gameobject cellObject() { return cell_.Item1; }
         public ConsoleColor cellColor() { return cell_.Item2; }
     }
 }
