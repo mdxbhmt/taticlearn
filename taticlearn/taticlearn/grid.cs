@@ -7,20 +7,32 @@ namespace taticlearn
 {
     class grid
     {
+        gamemain game;
         gridcell[,] grid_;
         Tuple<int, int> selectedindex;
-        bool seletection = true;
+        public bool selection { get{return selection_;} set{selection_=value;}}
+        bool selection_= false;
 
         public void insertgrid(gameobject obj)
         {
             grid_[3, 1] = new gridcell(obj);
         }
 
-        public grid(int x, int y)
+        public grid(int x, int y,gamemain parent)
         {
+            game = parent;
             grid_ = new gridcell[x, y];
             selectedindex = Tuple.Create(4, 1);
+            Right();
         }
+        public void Up()
+        { selectedindex = Tuple.Create(Math.Min(selectedindex.Item1 + 1, grid_.GetLength(0)),selectedindex.Item2);}
+        public void Down()
+        { selectedindex = Tuple.Create(Math.Max(selectedindex.Item1 -1, 0), selectedindex.Item2); }
+        public void Right()
+        { selectedindex = Tuple.Create(selectedindex.Item1, Math.Min(selectedindex.Item2 + 1, grid_.GetLength(1))); }
+        public void Left()
+        { selectedindex = Tuple.Create(selectedindex.Item1, Math.Max(selectedindex.Item2 - 1, 0)); }
         public void print()
         {
             foreach (int i in Enumerable.Range(0, grid_.GetLength(0)))
@@ -29,7 +41,7 @@ namespace taticlearn
                 {
                     gridcell cell = grid_[i, j];
                     ConsoleColor? bkgcolor = null;
-                    if (seletection)
+                    if (selection_)
                     {
                         if (selectedindex.Item1 == i && selectedindex.Item2 == j)
                             bkgcolor = ConsoleColor.White;
@@ -52,6 +64,11 @@ namespace taticlearn
                 }
                 Console.Write("\n");
             }
+        }
+
+        internal  void exec()
+        {
+            game.deselect();
         }
     }
 }

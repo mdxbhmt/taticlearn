@@ -18,6 +18,7 @@ namespace taticlearn
         {
             game = parent;
             executeMenuDic[menuItems.EndTurn] = () => game.runturn();
+            executeMenuDic[menuItems.Select] = () => game.select();
         }
 
         public void Next()

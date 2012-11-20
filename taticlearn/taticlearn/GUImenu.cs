@@ -7,9 +7,10 @@ namespace taticlearn
 {
     interface GUImenu
     {
-        void executeMenu();
-        void print();
         void Next();
         void Previous();
+        void executeMenu();
+        void print();
+
     }
 }

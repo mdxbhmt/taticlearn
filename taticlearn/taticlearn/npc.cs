@@ -24,7 +24,6 @@ namespace taticlearn
                 else
                     representation_ = "n";
                 return true;
-
             }
             return false;
         }

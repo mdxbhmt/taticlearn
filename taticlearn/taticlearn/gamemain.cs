@@ -13,31 +13,41 @@ namespace taticlearn
         GUImenu menu;
         List<gameobject> objects;
         Dictionary<ConsoleKey, Action> keyMapping;
+        Dictionary<ConsoleKey, Action> menuMapping;
+        Dictionary<ConsoleKey, Action> gridMapping;
 
 
         bool needsUpdate = true;
 
         public gamemain()
         {
-            agrid = new grid(10, 10);
+            agrid = new grid(10, 10,this);
             objects = new List<gameobject>();
 
             insertObject(new npc());
 
             menu = new mainmenu(this);
-            keyMapping = new Dictionary<ConsoleKey, Action>() { { ConsoleKey.UpArrow, () => this.menu.Next() }, { ConsoleKey.DownArrow, () => this.menu.Previous() }, { ConsoleKey.Enter, () => this.menu.executeMenu() } };
+            menuMapping = new Dictionary<ConsoleKey, Action>() { { ConsoleKey.UpArrow, () => this.menu.Next() }, { ConsoleKey.DownArrow, () => this.menu.Previous() }, { ConsoleKey.Enter, () => this.menu.executeMenu() } };
+            gridMapping = new Dictionary<ConsoleKey, Action>() { { ConsoleKey.UpArrow, () => this.agrid.Up()  }, { ConsoleKey.DownArrow, () => this.agrid.Down() }, 
+                                                                 { ConsoleKey.RightArrow, () => this.agrid.Right() }, { ConsoleKey.LeftArrow, () => this.agrid.Left() },{ ConsoleKey.Enter, () => this.agrid.exec() } };
+            keyMapping = menuMapping;
         }
-
-        private void insertObject(gameobject tresum)
+        internal void select()
         {
-            objects.Add(tresum);
-            agrid.insertgrid(tresum);
+            keyMapping = gridMapping;
+            agrid.selection = true;
+            needsUpdate = true;
+        }
+        
+        private void insertObject(gameobject obj)
+        {
+            objects.Add(obj);
+            agrid.insertgrid(obj);
         }
 
         public void runturn()
         {
             turn_++;
-
         }
 
         public void Update(TimeSpan deltaT)
@@ -47,6 +57,7 @@ namespace taticlearn
                 needsUpdate = a.Update(deltaT) | needsUpdate;
             }
         }
+
         internal void PrintGame()
         {
             if (needsUpdate)
@@ -68,6 +79,13 @@ namespace taticlearn
             { }
             catch (Exception)
             { throw; }
+        }
+
+        internal void deselect()
+        {
+            keyMapping = menuMapping;
+            agrid.selection = false;
+            needsUpdate = true;
         }
     }
 }
