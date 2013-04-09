@@ -7,24 +7,31 @@ namespace taticlearn
 {
     class npc : gameobject
     {
-        TimeSpan deltaTacc = new TimeSpan();
+  
         String representation_ = "n";
+        GUImenu mymenu;
+        public npc(gamemain parent) { mymenu = new mainmenu(parent); }
+        public GUImenu menu() { return mymenu; }
         public String representation()
         {
             return representation_;
         }
-        public bool Update(TimeSpan deltaT)
+        long lasttick=0;//mayoverflow
+        public bool Update(TimeSpan GameTime)
         {
-            deltaTacc = deltaTacc.Add(deltaT);
-            if (deltaTacc.TotalSeconds >= 10)
+            if (GameTime.Ticks / (TimeSpan.TicksPerSecond*10) > lasttick)
             {
-                deltaTacc = new TimeSpan();
+                lasttick = GameTime.Ticks / (TimeSpan.TicksPerSecond * 10);
+
                 if (representation_.Equals("n"))
                     representation_ = "N";
                 else
                     representation_ = "n";
                 return true;
             }
+            else
+            { }
+
             return false;
         }
     }

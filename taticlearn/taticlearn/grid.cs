@@ -13,9 +13,9 @@ namespace taticlearn
         public bool selection { get{return selection_;} set{selection_=value;}}
         bool selection_= false;
 
-        public void insertgrid(gameobject obj)
+        public void insertgrid(gameobject obj,int x, int y)
         {
-            grid_[3, 1] = new gridcell(obj);
+            grid_[x, y] = new gridcell(obj);
         }
 
         public grid(int x, int y,gamemain parent)
@@ -26,11 +26,11 @@ namespace taticlearn
             Right();
         }
         public void Up()
-        { selectedindex = Tuple.Create(Math.Min(selectedindex.Item1 + 1, grid_.GetLength(0)),selectedindex.Item2);}
+        { selectedindex = Tuple.Create(Math.Min(selectedindex.Item1 + 1, grid_.GetLength(0)-1),selectedindex.Item2);}
         public void Down()
         { selectedindex = Tuple.Create(Math.Max(selectedindex.Item1 -1, 0), selectedindex.Item2); }
         public void Right()
-        { selectedindex = Tuple.Create(selectedindex.Item1, Math.Min(selectedindex.Item2 + 1, grid_.GetLength(1))); }
+        { selectedindex = Tuple.Create(selectedindex.Item1, Math.Min(selectedindex.Item2 + 1, grid_.GetLength(1)-1)); }
         public void Left()
         { selectedindex = Tuple.Create(selectedindex.Item1, Math.Max(selectedindex.Item2 - 1, 0)); }
         public void print()
@@ -68,7 +68,7 @@ namespace taticlearn
 
         internal  void exec()
         {
-            game.deselect();
+            game.deselect(selectedindex);
         }
     }
 }

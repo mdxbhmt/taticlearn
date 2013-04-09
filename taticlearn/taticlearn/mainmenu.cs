@@ -9,26 +9,27 @@ namespace taticlearn
     {
         menuItems menuindex = menuItems.EndTurn;
         gamemain game;
-        public enum menuItems { EndTurn, Select, Nothing };
+        public enum menuItems { EndTurn, Select, Move, Nothing };
 
-        Dictionary<menuItems, Action> executeMenuDic = new Dictionary<menuItems, Action>();
-        public Dictionary<menuItems, String> menuitem = new Dictionary<menuItems, string> { { menuItems.Nothing, "Nothing" }, { menuItems.Select, "Select" }, { menuItems.EndTurn, "End Turn" } };
+        Dictionary<menuItems, Action> executeMenuDic;
+        public Dictionary<menuItems, String> menuitem = new Dictionary<menuItems, string> { { menuItems.Nothing, "Nothing" },{ menuItems.Move, "Move" } ,{ menuItems.Select, "Select" }, { menuItems.EndTurn, "End Turn" } };
 
         public mainmenu(gamemain parent)
         {
             game = parent;
-            executeMenuDic[menuItems.EndTurn] = () => game.runturn();
-            executeMenuDic[menuItems.Select] = () => game.select();
+            executeMenuDic = new Dictionary<menuItems, Action>(){{menuItems.EndTurn, () => game.runturn()},{menuItems.Move,()=>game.move()},{menuItems.Select,() => game.select()}};
+
         }
 
         public void Next()
         {
-            menuindex = ((menuItems)Math.Min((int)menuindex + 1, 2));
+            menuindex = ((menuItems)Math.Min((int)menuindex + 1, menuitem.Count-1));
         }
 
         public void Previous()
         {
             menuindex = ((menuItems)Math.Max((int)menuindex - 1, 0));
+
         }
 
         public void executeMenu()
@@ -36,7 +37,7 @@ namespace taticlearn
             try
             { executeMenuDic[menuindex](); }
             catch (KeyNotFoundException)
-            { }
+            {  }
             catch (Exception)
             { throw; }
         }
