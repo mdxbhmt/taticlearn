@@ -19,8 +19,9 @@ namespace taticlearn
             Console.CancelKeyPress += new ConsoleCancelEventHandler(Console_CancelKeyPress);
 
             gamemain game = new gamemain();
-            TimeSpan deltaT = new TimeSpan();     
-    
+            TimeSpan deltaT = new TimeSpan();
+            List<TimeSpan> List = new List<TimeSpan>();
+
             while (!_s_stop)
             {
                 
@@ -36,8 +37,10 @@ namespace taticlearn
                   
                     while (Console.KeyAvailable)
                         Console.ReadKey(true);
+                
                 }
-                Thread.Sleep((int)timetosleep.TotalMilliseconds);
+                Thread.Sleep(timetosleep);
+                List.Add(timetosleep);
                 stopwatch.Stop();
                 sleeperror =  stopwatch.Elapsed-timetosleep;
                 deltaT = stopwatch.Elapsed;  
@@ -45,6 +48,7 @@ namespace taticlearn
             }
             Console.WriteLine("\n See ya, Space Cowboy...");
             Thread.Sleep(3000);
+
         }
         static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
