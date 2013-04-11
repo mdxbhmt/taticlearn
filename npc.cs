@@ -7,7 +7,7 @@ namespace taticlearn
 {
     class npc : gameobject
     {
-  
+
         String representation_ = "n";
         GUImenu mymenu;
         public npc(gamemain parent) { mymenu = new mainmenu(parent); }
@@ -16,23 +16,30 @@ namespace taticlearn
         {
             return representation_;
         }
-        long lasttick=0;//mayoverflow
+        long lasttick = 0;//mayoverflow
         public bool Update(TimeSpan GameTime)
         {
-            if (GameTime.Ticks / (TimeSpan.TicksPerSecond*10) > lasttick)
+            if (GameTime.Ticks / (TimeSpan.TicksPerSecond * 10) > lasttick)
             {
                 lasttick = GameTime.Ticks / (TimeSpan.TicksPerSecond * 10);
 
-                if (representation_.Equals("n"))
-                    representation_ = "N";
-                else
-                    representation_ = "n";
+                flipRepresentation();
                 return true;
             }
             else
-            { }
+            {
+                return false;
+            }
 
-            return false;
+
+        }
+
+        private void flipRepresentation()
+        {
+            if (representation_.Equals("n"))
+                representation_ = "N";
+            else
+                representation_ = "n";
         }
     }
 }

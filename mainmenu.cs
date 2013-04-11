@@ -13,18 +13,27 @@ namespace taticlearn
         public enum menuItems { EndTurn, Select, Move, Nothing };
 
         Dictionary<menuItems, Action> executeMenuDic;
-        public Dictionary<menuItems, String> menuitem = new Dictionary<menuItems, string> { { menuItems.Nothing, "Nothing" },{ menuItems.Move, "Move" } ,{ menuItems.Select, "Select" }, { menuItems.EndTurn, "End Turn" } };
-
+        public Dictionary<menuItems, String> menuitem = new Dictionary<menuItems, string> { { menuItems.Nothing, "Nothing" },
+                                                                                            { menuItems.Move, "Move" },
+                                                                                            { menuItems.Select, "Select" }, 
+                                                                                            { menuItems.EndTurn, "End Turn" } };
+        Dictionary<ConsoleKey, Action> keyMapping_;
+        public Dictionary<ConsoleKey, Action> keyMapping() { return keyMapping_; }
         public mainmenu(gamemain parent)
         {
+            keyMapping_ = new Dictionary<ConsoleKey, Action>() { { ConsoleKey.UpArrow, () => this.Next() },
+                                                                 { ConsoleKey.DownArrow, () => this.Previous() },
+                                                                 { ConsoleKey.Enter, () => this.executeMenu() } };
             game = parent;
-            executeMenuDic = new Dictionary<menuItems, Action>(){{menuItems.EndTurn, () => game.runturn()},{menuItems.Move,()=>game.move()},{menuItems.Select,() => game.select()}};
+            executeMenuDic = new Dictionary<menuItems, Action>(){ {menuItems.EndTurn, () => game.runturn()},
+                                                                  {menuItems.Move,()=>game.move()}, 
+                                                                  {menuItems.Select,() => game.select()} };
 
         }
 
         public void Next()
         {
-            menuindex = ((menuItems)Math.Min((int)menuindex + 1, menuitem.Count-1));
+            menuindex = ((menuItems)Math.Min((int)menuindex + 1, menuitem.Count - 1));
         }
 
         public void Previous()
@@ -38,7 +47,7 @@ namespace taticlearn
             try
             { executeMenuDic[menuindex](); }
             catch (KeyNotFoundException)
-            {  }
+            { }
             catch (Exception)
             { throw; }
         }

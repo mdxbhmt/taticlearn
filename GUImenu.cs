@@ -7,6 +7,7 @@ namespace taticlearn
 {
     interface GUImenu
     {
+        Dictionary<ConsoleKey, Action> keyMapping();
         void Next();
         void Previous();
         void executeMenu();

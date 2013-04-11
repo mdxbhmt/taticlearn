@@ -10,27 +10,32 @@ namespace taticlearn
         gamemain game;
         gridcell[,] grid_;
         Tuple<int, int> selectedindex;
-        public bool selection { get{return selection_;} set{selection_=value;}}
-        bool selection_= false;
-
-        public void insertgrid(gameobject obj,int x, int y)
+        public bool selection { get { return selection_; } set { selection_ = value; } }
+        bool selection_ = false;
+        public Dictionary<ConsoleKey, Action> keyMapping;
+        public void insertgrid(gameobject obj, int x, int y)
         {
             grid_[x, y] = new gridcell(obj);
         }
 
-        public grid(int x, int y,gamemain parent)
+        public grid(int x, int y, gamemain parent)
         {
+            keyMapping = new Dictionary<ConsoleKey, Action>() {  { ConsoleKey.UpArrow, () => this.Up() }, 
+                                                                 { ConsoleKey.DownArrow, () => this.Down() }, 
+                                                                 { ConsoleKey.RightArrow, () => this.Right() }, 
+                                                                 { ConsoleKey.LeftArrow, () => this.Left() },
+                                                                 { ConsoleKey.Enter, () => this.exec()} };
             game = parent;
             grid_ = new gridcell[x, y];
             selectedindex = Tuple.Create(4, 1);
             Right();
         }
         public void Up()
-        { selectedindex = Tuple.Create(Math.Min(selectedindex.Item1 + 1, grid_.GetLength(0)-1),selectedindex.Item2);}
+        { selectedindex = Tuple.Create(Math.Min(selectedindex.Item1 + 1, grid_.GetLength(0) - 1), selectedindex.Item2); }
         public void Down()
-        { selectedindex = Tuple.Create(Math.Max(selectedindex.Item1 -1, 0), selectedindex.Item2); }
+        { selectedindex = Tuple.Create(Math.Max(selectedindex.Item1 - 1, 0), selectedindex.Item2); }
         public void Right()
-        { selectedindex = Tuple.Create(selectedindex.Item1, Math.Min(selectedindex.Item2 + 1, grid_.GetLength(1)-1)); }
+        { selectedindex = Tuple.Create(selectedindex.Item1, Math.Min(selectedindex.Item2 + 1, grid_.GetLength(1) - 1)); }
         public void Left()
         { selectedindex = Tuple.Create(selectedindex.Item1, Math.Max(selectedindex.Item2 - 1, 0)); }
         public void print()
@@ -66,7 +71,7 @@ namespace taticlearn
             }
         }
 
-        internal  void exec()
+        internal void exec()
         {
             game.deselect(selectedindex);
         }

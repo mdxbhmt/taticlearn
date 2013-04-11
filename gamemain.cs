@@ -14,38 +14,32 @@ namespace taticlearn
         GUImenu menu;
         List<gameobject> objects;
         Dictionary<ConsoleKey, Action> keyMapping;
-        Dictionary<ConsoleKey, Action> menuMapping;
-        Dictionary<ConsoleKey, Action> gridMapping;
+
         internal TimeSpan GameTime = new TimeSpan(); //Internal for debugging purposes
-      
+
         bool needsUpdate = true;
         private gameobject ActiveNpc;
 
         public gamemain()
         {
             agrid = new grid(10, 10, this);
-            gridMapping = new Dictionary<ConsoleKey, Action>() { { ConsoleKey.UpArrow, () => this.agrid.Up()  }, { ConsoleKey.DownArrow, () => this.agrid.Down() }, 
-                                                                 { ConsoleKey.RightArrow, () => this.agrid.Right() }, { ConsoleKey.LeftArrow, () => this.agrid.Left() },
-                                                                 { ConsoleKey.Enter, () => this.agrid.exec() } };
 
             objects = new List<gameobject>();
             gameobject onenpc = new npc(this);
             insertObject(onenpc);
             setActive(onenpc);
 
-            keyMapping = menuMapping;
+            keyMapping = ActiveNpc.menu().keyMapping();
         }
 
         private void setActive(gameobject onenpc)
         {
             ActiveNpc = onenpc;
             menu = ActiveNpc.menu();
-            menuMapping = new Dictionary<ConsoleKey, Action>() { { ConsoleKey.UpArrow, () => this.menu.Next() }, { ConsoleKey.DownArrow, () => this.menu.Previous() },
-                                                                 { ConsoleKey.Enter, () => this.menu.executeMenu() } };
         }
         internal void select()
         {
-            keyMapping = gridMapping;
+            keyMapping = agrid.keyMapping;
             agrid.selection = true;
             needsUpdate = true;
         }
@@ -118,12 +112,10 @@ namespace taticlearn
         internal void deselect(Tuple<int, int> selected)
         {
             selectedindex = selected;
-            keyMapping = menuMapping;
+            keyMapping = ActiveNpc.menu().keyMapping();
             agrid.selection = false;
             needsUpdate = true;
         }
-
-
 
         internal object move()
         {
