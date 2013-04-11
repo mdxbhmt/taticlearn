@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 namespace taticlearn
 {
     class gamemain
@@ -26,16 +24,16 @@ namespace taticlearn
 
             objects = new List<gameobject>();
             gameobject onenpc = new npc(this);
-            insertObject(onenpc);
+            insertObject(onenpc,0,0);
             setActive(onenpc);
 
-            keyMapping = ActiveNpc.menu().keyMapping();
         }
 
         private void setActive(gameobject onenpc)
         {
             ActiveNpc = onenpc;
             menu = ActiveNpc.menu();
+            keyMapping = ActiveNpc.menu().keyMapping();
         }
         internal void select()
         {
@@ -43,11 +41,18 @@ namespace taticlearn
             agrid.selection = true;
             needsUpdate = true;
         }
+        internal void deselect(Tuple<int, int> selected)
+        {
+            selectedindex = selected;
+            setActive(ActiveNpc);
+            
+            needsUpdate = true;
+        }
 
-        private void insertObject(gameobject obj)
+        private void insertObject(gameobject obj,int x, int y)
         {
             objects.Add(obj);
-            agrid.insertgrid(obj, 3, 1);
+            agrid.insertgrid(obj, x, y);
         }
 
         public void runturn()
@@ -58,20 +63,29 @@ namespace taticlearn
         public void Update(TimeSpan deltaT)
         {
             GameTime += deltaT;
+            //Linq ways of doing it
+            //needsUpdate |= objects.Aggregate<gameobject, Boolean, Boolean>(HudUpdate(), (workingUpdate, next) =>
+            //                                      next.Update(deltaT) | workingUpdate, x => x);
+            //needsUpdate |= HudUpdate()|(from obj in objects
+            //                select obj.Update(deltaT)).Aggregate(HudUpdate(), (workingUpdate, next) =>
+            //                                     next | workingUpdate);
 
-            HudUpdate();
-            foreach (gameobject a in objects)
-            {
-                needsUpdate = a.Update(GameTime) | needsUpdate;
-            }
+            needsUpdate |= HudUpdate();
+            foreach (var a in objects)
+                needsUpdate |= a.Update(deltaT);
+
         }
         long lasttick = 0; //may overflow, can be changed for rem
-        private void HudUpdate()
+        private Boolean HudUpdate()
         {
             if (GameTime.Ticks / TimeSpan.TicksPerSecond > lasttick)
             {
                 lasttick = (GameTime.Ticks / TimeSpan.TicksPerSecond);
-                needsUpdate = true;
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -80,13 +94,18 @@ namespace taticlearn
             if (needsUpdate)
             {
                 Console.Clear();
-                Console.WriteLine("Game time {0}", GameTime.TotalSeconds);
-                Console.WriteLine("Turn {0}", turn);
-                Console.WriteLine("Last Selected: {0}", selectedindex);
+                printHud();
                 agrid.print();
                 menu.print();
                 needsUpdate = false;
             }
+        }
+
+        private void printHud()
+        {
+            Console.WriteLine("Game time {0}", GameTime.TotalSeconds);
+            Console.WriteLine("Turn {0}", turn);
+            Console.WriteLine("Last Selected: {0}", selectedindex);
         }
 
         internal void keyInput(ConsoleKey a)
@@ -109,13 +128,6 @@ namespace taticlearn
             throw new NotImplementedException("RequestTrap");
         }
 
-        internal void deselect(Tuple<int, int> selected)
-        {
-            selectedindex = selected;
-            keyMapping = ActiveNpc.menu().keyMapping();
-            agrid.selection = false;
-            needsUpdate = true;
-        }
 
         internal object move()
         {

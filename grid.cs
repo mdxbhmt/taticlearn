@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace taticlearn
 {
@@ -25,10 +24,11 @@ namespace taticlearn
                                                                  { ConsoleKey.RightArrow, () => this.Right() }, 
                                                                  { ConsoleKey.LeftArrow, () => this.Left() },
                                                                  { ConsoleKey.Enter, () => this.exec()} };
-            game = parent;
+            
             grid_ = new gridcell[x, y];
-            selectedindex = Tuple.Create(4, 1);
-            Right();
+            selectedindex = Tuple.Create(0, 0);
+            game = parent;
+            
         }
         public void Up()
         { selectedindex = Tuple.Create(Math.Min(selectedindex.Item1 + 1, grid_.GetLength(0) - 1), selectedindex.Item2); }
@@ -73,6 +73,7 @@ namespace taticlearn
 
         internal void exec()
         {
+            selection = false;
             game.deselect(selectedindex);
         }
     }

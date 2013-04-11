@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace taticlearn
 {
     class npc : gameobject
     {
-
         String representation_ = "n";
         GUImenu mymenu;
         public npc(gamemain parent) { mymenu = new mainmenu(parent); }
@@ -22,7 +17,6 @@ namespace taticlearn
             if (GameTime.Ticks / (TimeSpan.TicksPerSecond * 10) > lasttick)
             {
                 lasttick = GameTime.Ticks / (TimeSpan.TicksPerSecond * 10);
-
                 flipRepresentation();
                 return true;
             }
@@ -30,8 +24,6 @@ namespace taticlearn
             {
                 return false;
             }
-
-
         }
 
         private void flipRepresentation()
