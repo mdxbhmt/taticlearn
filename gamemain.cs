@@ -16,8 +16,8 @@ namespace taticlearn
         Dictionary<ConsoleKey, Action> keyMapping;
         Dictionary<ConsoleKey, Action> menuMapping;
         Dictionary<ConsoleKey, Action> gridMapping;
-        TimeSpan GameTime = new TimeSpan();
-
+        internal TimeSpan GameTime = new TimeSpan(); //Internal for debugging purposes
+      
         bool needsUpdate = true;
         private gameobject ActiveNpc;
 
