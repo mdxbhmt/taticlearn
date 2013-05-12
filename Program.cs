@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Diagnostics;
 namespace taticlearn
@@ -25,7 +28,7 @@ namespace taticlearn
             while (!_s_stop)
             {
                 
-                var stopwatch = Stopwatch.StartNew();
+                var stopwatch = System.Diagnostics.Stopwatch.StartNew();
                 var timetosleep = new TimeSpan(0, 0, 0, 0, 100) - sleeperror;
                 game.Update(deltaT);
                 game.PrintGame();

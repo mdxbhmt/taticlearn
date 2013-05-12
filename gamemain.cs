@@ -54,7 +54,7 @@ namespace taticlearn
         {
             keyMapping = agrid.keyMapping;
             agrid.selection = true;
-            myaction = () => { agrid.moveFromTo(activeIndex, selectedindex); activeIndex = selectedindex; setActive(ActiveNpc); };
+            myaction = () => { agrid.moveFromTo(activeIndex, selectedindex); activeIndex = selectedindex;  setActive(ActiveNpc); };
             agrid.SimpleEvent += agrid_SimpleEvent;
             updateGUI(); 
         }
