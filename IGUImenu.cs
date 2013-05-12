@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace taticlearn
 {
-    interface GUImenu
+    interface IGUImenu
     {
         Dictionary<ConsoleKey, Action> keyMapping();
         void Next();

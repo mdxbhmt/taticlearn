@@ -1,55 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+
+
 namespace taticlearn
 {
     class gamemain
     {
         public int turn { get { return turn_; } }
         public Tuple<int, int> selectedindex { get; set; }
+        public Tuple<int, int> activeIndex { get; set; }
         grid agrid;
         int turn_;
-        GUImenu menu;
-        List<gameobject> objects;
+        IGUImenu menu;
+        List<Igameobject> objects;
         Dictionary<ConsoleKey, Action> keyMapping;
 
         internal TimeSpan GameTime = new TimeSpan(); //Internal for debugging purposes
 
         bool needsUpdate = true;
-        private gameobject ActiveNpc;
-
+        private Igameobject ActiveNpc;
+        void updateGUI(){ needsUpdate = true; }
         public gamemain()
         {
             agrid = new grid(10, 10, this);
 
-            objects = new List<gameobject>();
-            gameobject onenpc = new npc(this);
-            insertObject(onenpc,0,0);
+            objects = new List<Igameobject>();
+            Igameobject onenpc = new npc(this);
+            insertObject(onenpc, 0, 0);
+            activeIndex = Tuple.Create(0, 0);
             setActive(onenpc);
-
         }
 
-        private void setActive(gameobject onenpc)
+        private void setActive(Igameobject onenpc)
         {
             ActiveNpc = onenpc;
             menu = ActiveNpc.menu();
             keyMapping = ActiveNpc.menu().keyMapping();
         }
+        Action myaction;
         internal void select()
         {
             keyMapping = agrid.keyMapping;
             agrid.selection = true;
-            needsUpdate = true;
+            myaction = () => { setActive(ActiveNpc); };
+            agrid.SimpleEvent += agrid_SimpleEvent;
+            updateGUI(); 
         }
-        internal void deselect(Tuple<int, int> selected)
+        internal void move()
         {
-            selectedindex = selected;
-            setActive(ActiveNpc);
-            
-            needsUpdate = true;
+            keyMapping = agrid.keyMapping;
+            agrid.selection = true;
+            myaction = () => { agrid.moveFromTo(activeIndex, selectedindex); activeIndex = selectedindex; setActive(ActiveNpc); };
+            agrid.SimpleEvent += agrid_SimpleEvent;
+            updateGUI(); 
         }
 
-        private void insertObject(gameobject obj,int x, int y)
+        void agrid_SimpleEvent(object sender, grid.SomeEventArgs e)
+        {
+            selectedindex = e.arg;
+            myaction();
+            agrid.SimpleEvent -= agrid_SimpleEvent;
+        }
+
+
+        private void insertObject(Igameobject obj, int x, int y)
         {
             objects.Add(obj);
             agrid.insertgrid(obj, x, y);
@@ -112,8 +130,9 @@ namespace taticlearn
         {
             try
             {
-                keyMapping[a](); needsUpdate = true;
-                //   RequestTrap();
+                keyMapping[a]();
+                updateGUI();
+                
             }
             catch (KeyNotFoundException)
             { }
@@ -123,15 +142,7 @@ namespace taticlearn
             { throw; }
         }
 
-        private void RequestTrap()
-        {
-            throw new NotImplementedException("RequestTrap");
-        }
 
 
-        internal object move()
-        {
-            throw new NotImplementedException("move");
-        }
     }
 }

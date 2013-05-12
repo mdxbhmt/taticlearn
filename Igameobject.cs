@@ -2,10 +2,10 @@
 
 namespace taticlearn
 {
-    interface gameobject
+    interface Igameobject
     {
         String representation();
-        GUImenu menu();
+        IGUImenu menu();
         bool Update(TimeSpan deltaT);
     }
 }

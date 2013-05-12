@@ -1,12 +1,12 @@
 ﻿using System;
 namespace taticlearn
 {
-    class npc : gameobject
+    class npc : Igameobject
     {
         String representation_ = "n";
-        GUImenu mymenu;
-        public npc(gamemain parent) { mymenu = new mainmenu(parent); }
-        public GUImenu menu() { return mymenu; }
+        IGUImenu mymenu;
+        public npc(gamemain parent) { mymenu = new npcMenu(parent); }
+        public IGUImenu menu() { return mymenu; }
         public String representation()
         {
             return representation_;

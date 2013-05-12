@@ -12,7 +12,12 @@ namespace taticlearn
         public bool selection { get { return selection_; } set { selection_ = value; } }
         bool selection_ = false;
         public Dictionary<ConsoleKey, Action> keyMapping;
-        public void insertgrid(gameobject obj, int x, int y)
+
+        public class SomeEventArgs : EventArgs { public Tuple<int, int> arg; public SomeEventArgs(Tuple<int, int> a) : base() { arg = a; } }
+
+        public event EventHandler<SomeEventArgs> SimpleEvent;
+        //public event EventHandler SimpleEvent;
+        public void insertgrid(Igameobject obj, int x, int y)
         {
             grid_[x, y] = new gridcell(obj);
         }
@@ -74,7 +79,14 @@ namespace taticlearn
         internal void exec()
         {
             selection = false;
-            game.deselect(selectedindex);
+            
+            SimpleEvent(this, new  SomeEventArgs(selectedindex));
+        }
+
+       public void moveFromTo(Tuple<int, int> from, Tuple<int, int> to)
+        {
+            grid_[to.Item1, to.Item2] = grid_[from.Item1, from.Item2];
+            grid_[from.Item1, from.Item2] = null; 
         }
     }
 }

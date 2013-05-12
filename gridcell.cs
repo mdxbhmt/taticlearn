@@ -7,17 +7,17 @@ namespace taticlearn
 
         class cell
         {
-            internal gameobject cellObject_;
+            internal Igameobject cellObject_;
             internal ConsoleColor cellColor_;
-            public cell(gameobject a, ConsoleColor b)
+            public cell(Igameobject a, ConsoleColor b)
             {
                 this.cellObject_ = a;
                 this.cellColor_ = b;
             }
         }
         cell cell_;
-        public gridcell(gameobject cellobject) { cell_ = new cell(cellobject, ConsoleColor.Green); }
-        public gameobject cellObject() { return cell_.cellObject_; }
+        public gridcell(Igameobject cellobject) { cell_ = new cell(cellobject, ConsoleColor.Green); }
+        public Igameobject cellObject() { return cell_.cellObject_; }
         public ConsoleColor cellColor() { return cell_.cellColor_; }
     }
 }
